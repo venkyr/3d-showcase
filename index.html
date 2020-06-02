@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>New page</title>
+        <link href="css/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <script src="js/stl_viewer.js"></script>
+        <div id="stl_panel" class="stl_panel"></div>
+        <div class="control-panel">
+            <input type="file" onchange='stl_viewer.add_model({local_file:this.files[0]});' accept="*.stl"/>
+            <button id="animate-x" disabled="true" onclick="animateAlongAxis('x')">X</button>
+            <button id="animate-y" disabled="true" onclick="animateAlongAxis('y')">Y</button>
+            <button id="animate-z" disabled="true" onclick="animateAlongAxis('z')">Z</button>
+        </div>
+        <script>
+            var model_id = 0;
+            var stl_viewer=new StlViewer(document.getElementById("stl_panel"), 
+                    {drag_and_drop:true, model_loaded_callback:onModelLoaded});
+            function onModelLoaded(m) {
+                model_id = m;
+                stl_viewer.set_color(model_id, "#FF6600");
+                document.getElementById("animate-x").disabled = false;
+                document.getElementById("animate-y").disabled = false;
+                document.getElementById("animate-z").disabled = false;
+
+            }
+            function animateAlongAxis(axis) {
+                switch(axis) {
+                    case 'x': delta_arg = {rotationx:3.14, msec:3000}; break;
+                    case 'y': delta_arg = {rotationy:3.14, msec:3000}; break;
+                    case 'z': 
+                    default : delta_arg = {rotationz:3.14, msec:3000}; break;    
+                }
+                stl_viewer.animate_model(model_id, {delta: delta_arg});
+            }
+        </script>
+    </body>
+</html>
